@@ -1,0 +1,28 @@
+---
+import ProjectCard from "@/components/ProjectCard.astro";
+import Promo from "@/components/Promo.astro";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import ProjectLayout from "@/layouts/ProjectLayout.astro";
+import { getCollection } from "astro:content";
+
+const projects = await getCollection('project');
+const promo = await getCollection('promo');
+const latestPromo = promo.sort((a, b) => a.data.date.valueOf() - b.data.date.valueOf())[0]
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={t('nav.projects')}>
+  <ProjectLayout>
+    <section aria-label="promo" class="container mx-auto px-4 my-16">
+      <Promo {...latestPromo} />
+    </section>
+    <section aria-label="projects" class="relative flex gap-2 snap-x snap-mandatory mb-16 overflow-x-auto no-scrollbar px-4 sm:container sm:mx-auto sm:snap-none sm:grid md:grid-cols-2 xl:grid-cols-3 sm:gap-8">
+      {projects.map(project => (
+        <ProjectCard project={project} />
+      ))}
+    </section>
+  </ProjectLayout>
+</Layout>

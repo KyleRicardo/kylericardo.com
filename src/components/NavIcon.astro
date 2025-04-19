@@ -1,0 +1,26 @@
+---
+import { Icon } from "astro-icon/components";
+
+interface Props {
+  name: string;
+  href: string;
+  icon: string;
+  size?: 'sm' | 'md' | 'lg'
+  external?: boolean;
+}
+
+const { name, href, icon, size = 'sm', external } = Astro.props;
+---
+
+<a
+  target={external ? '_blank' : '_self'}
+  href={href}
+  class:list={[
+    'inline-flex items-center justify-center px-0 gap-2 pointer-events-auto whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground',
+    {'h-8 w-8 [&_svg]:size-4': size === 'sm'},
+    {'h-10 w-10 [&_svg]:size-6': size === 'md'},
+    {'h-12 w-12 [&_svg]:size-8': size === 'lg'},
+  ]}>
+  <Icon name={icon} />
+  <span class="sr-only">{name}</span>
+</a>

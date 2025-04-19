@@ -1,0 +1,53 @@
+---
+import { getLangFromUrl } from '@/i18n/utils';
+import { getFlatCategoryInfo } from '@/utils/get-categories';
+import { render, type CollectionEntry } from 'astro:content';
+
+interface Props {
+  post: CollectionEntry<'blog'>
+}
+
+const { post } = Astro.props;
+
+const { title, description, date, categories, tags } = post.data;
+const { remarkPluginFrontmatter } = await render(post);
+
+const lang = getLangFromUrl(Astro.url);
+const formattedDate = date.toLocaleDateString(lang, {dateStyle: 'medium'});
+
+const flatCategoryInfo = getFlatCategoryInfo(categories);
+
+const displayExcerpt = description || remarkPluginFrontmatter.excerpt || ''; // Fallback chain
+---
+
+<div class="py-2 [&:not(:first-child)]:border-grid [&:not(:first-child)]:border-t">
+  <div class="relative group cursor-pointer md:px-4 py-3 md:py-6 rounded-xl hover:bg-accent">
+    <a href={`/posts/${post.id}`} class="absolute inset-0 z-0" />
+    <div class="relative z-10 flex flex-col pointer-events-none tracking-wide">
+      <h2 class="text-xl font-semibold text-foreground group-hover:text-sky-500 dark:group-hover:text-sky-300">
+        {title}
+      </h2>
+      
+      <div class="flex mt-2 gap-4 text-sm font-semibold text-muted-foreground overflow-hidden whitespace-nowrap">
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        {flatCategoryInfo.length > 0 && (
+          <div class="inline space-x-2">
+            {flatCategoryInfo.map(category => (
+              <a href={category.href} class="pointer-events-auto hover:text-primary">{category.name}</a>
+            ))}
+          </div>
+        )}
+        {tags && <div class="inline space-x-2">
+          {tags.map(tag => (
+            <a href={`/tags/${tag}`} class="pointer-events-auto hover:text-primary">#{tag}</a>
+          ))}
+        </div>
+        }
+      </div>
+    
+      <p class="mt-2 text-base text-muted-foreground line-clamp-4">
+        {displayExcerpt}
+      </p>
+    </div>
+  </div>
+</div>

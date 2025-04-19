@@ -1,0 +1,30 @@
+---
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import type { GroupedPosts } from '@/utils/getPosts';
+import ArchiveItem from './ArchiveItem.astro';
+
+interface Props {
+  posts: GroupedPosts[];
+}
+
+const posts = Astro.props.posts;
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<div class="flex-1 my-4 md:my-8">
+  {posts.map((group) => (
+    <section class="flex-1">
+      <div class="flex items-center">
+        <h2 class="w-[50px] font-semibold text-xl text-right">{group.year}</h2>
+        <span class="relative h-10 w-10 before:w-2 before:h-2 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:block before:rounded-lg before:bg-zinc-300" />
+        <span class="text-muted-foreground">{group.posts.length} {t('archive.posts')}</span>
+      </div>
+      <ul>
+        {group.posts.map((post) => (
+          <ArchiveItem id={post.id} date={post.data.date} title={post.data.title} />
+        ))}
+      </ul>
+    </section>
+  ))}
+</div>

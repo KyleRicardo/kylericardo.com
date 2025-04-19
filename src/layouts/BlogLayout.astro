@@ -1,0 +1,12 @@
+---
+import NavLink from "@/components/NavLink.astro";
+---
+<div class="mx-auto container px-4 max-w-3xl" >
+  <nav class="flex gap-4 justify-center items-center h-16 border-b border-grid">
+    <NavLink name="文章" href="/posts" />
+    <NavLink name="归档" href="/archives" />
+    <NavLink name="分类" href="/categories" />
+    <NavLink name="标签" href="/tags" />
+  </nav>
+  <slot />
+</div>

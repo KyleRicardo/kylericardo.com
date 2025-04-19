@@ -1,0 +1,14 @@
+---
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<div class="mx-auto container max-w-[1400px] min-w-xs">
+  <header class="text-center my-8 md:my-16">
+    <h1 class="text-4xl font-bold mb-4">{t('projects.title')}</h1>
+    <p class="font-medium text-muted-foreground">{t('projects.description')}</p>
+  </header>
+  <slot />
+</div>

@@ -1,0 +1,26 @@
+---
+import type { Category } from '@/utils/get-categories'
+import CategorySubList from './CategorySubList.astro'
+
+interface Props {
+  categories: Category[]
+}
+
+const { categories } = Astro.props
+---
+
+<ul class="w-full max-w-md flex flex-col gap-1 mt-6">
+  {categories.map((category) => (
+    <li>
+      <a href={`categories/${category.name}`} class="relative flex justify-between items-center px-3 py-2 text-sm font-medium rounded-sm hover:bg-muted">
+        <span class="px-2">{category.name}</span>
+        <span class="pointer-events-none absolute right-2 flex h-5 min-w-5 select-none items-center justify-center rounded-md px-1 text-xs font-medium tabular-nums">{category.count}</span>
+      </a>
+      {category.children && (
+        <div>
+          <CategorySubList parentUrl={`categories/${category.name}`} categories={category.children} />
+        </div>
+      )}
+    </li>
+  ))}
+</ul>

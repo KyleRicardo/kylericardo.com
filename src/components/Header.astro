@@ -1,0 +1,154 @@
+---
+import { Icon } from "astro-icon/components";
+import { getLangFromUrl, useTranslations, useTranslatedPath } from '@/i18n/utils';
+import NavIcon from "./NavIcon.astro";
+import { ModeToggle } from "./ModeToggle";
+import Logo from "../assets/logo.svg";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+const translatePath = useTranslatedPath(lang);
+---
+
+<header class="border-grid sticky top-0 z-50 w-full border-b bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
+  <div class="mx-auto container max-w-[1400px] flex px-4 h-14 items-center gap-2 md:gap-4">
+    <div class="globalnav-menutrigger absolute top-0 left-0 z-3 md:hidden">
+      <button class="relative flex justify-center items-center h-14 w-14" id="globalnav-menutrigger-button" aria-controls="globalnav-list" aria-label="Menu" data-topnav-menu-label-open="Menu" data-topnav-menu-label-close="Close" data-topnav-flyout-trigger-compact="menu" class="globalnav-menutrigger-button"><svg width="18" height="18" viewBox="0 0 18 18"><polyline id="globalnav-menutrigger-bread-bottom" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" points="2 12, 16 12" class="globalnav-menutrigger-bread globalnav-menutrigger-bread-bottom"><animate id="globalnav-anim-menutrigger-bread-bottom-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 12, 16 12; 2 9, 16 9; 3.5 15, 15 3.5"></animate><animate id="globalnav-anim-menutrigger-bread-bottom-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 15, 15 3.5; 2 9, 16 9; 2 12, 16 12"></animate></polyline><polyline id="globalnav-menutrigger-bread-top" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round" points="2 5, 16 5" class="globalnav-menutrigger-bread globalnav-menutrigger-bread-top"><animate id="globalnav-anim-menutrigger-bread-top-open" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 2 5, 16 5; 2 9, 16 9; 3.5 3.5, 15 15"></animate><animate id="globalnav-anim-menutrigger-bread-top-close" attributeName="points" keyTimes="0;0.5;1" dur="0.24s" begin="indefinite" fill="freeze" calcMode="spline" keySplines="0.42, 0, 1, 1;0, 0, 0.58, 1" values=" 3.5 3.5, 15 15; 2 9, 16 9; 2 5, 16 5"></animate></polyline></svg>
+      </button>
+    </div>
+    <div id="mobile-menu" class="absolute md:hidden top-0 left-0 z-2 w-full pt-14 bg-background data-[state=open]:h-screen data-[state=closed]:h-0 data-[state=open]:visible data-[state=closed]:invisible data-[state=open]:opacity-100 data-[state=closed]:opacity-0 transition-all duration-640" data-state="closed">
+      <ul class="flex flex-col gap-4 font-semibold text-3xl px-12 *:transition-all *:duration-640 *:delay-320">
+        <li>
+          <a href={translatePath('/posts')}>{t('nav.blog')}</a>
+        </li>
+        <li>
+          <a href={translatePath('/projects')}>{t('nav.projects')}</a>
+        </li>
+        <li>
+          <a href={translatePath('/about')}>{t('nav.about')}</a>
+        </li>
+        <li>
+          <a href="https://github.com/KyleRicardo" rel="noopener noreferrer" target="_blank">GitHub</a>
+        </li>
+        <li>
+          <a href="https://x.com/KyleRicardo666" rel="noopener noreferrer" target="_blank">Twitter</a>
+        </li>
+        <li>
+          <a href="https://bsky.app/profile/kylericardo.bsky.social" rel="noopener noreferrer" target="_blank">Bluesky</a>
+        </li>
+        <li>
+          <a href="https://example.com" rel="noopener noreferrer" target="_blank">RSS Feed</a>
+        </li>
+      </ul>
+    </div>
+    <div class="mr-4 flex">
+      <a class="mr-4 flex items-center gap-2 lg:mr-6" href="/">
+        <Logo width={16} height={16} />
+        <span class="font-bold inline-block ml-8 md:ml-0">Kyle's Blog</span>
+      </a>
+      <nav class="hidden md:flex items-center gap-4 text-sm xl:gap-6">
+        <a class="transition-colors hover:text-foreground/80 text-foreground/80" href={translatePath('/posts')}>{t('nav.blog')}</a>
+        <a class="transition-colors hover:text-foreground/80 text-foreground/80" href={translatePath('/projects')}>{t('nav.projects')}</a>
+        <a class="transition-colors hover:text-foreground/80 text-foreground/80" href={translatePath('/about')}>{t('nav.about')}</a>
+      </nav>
+    </div>
+    <div class="ml-auto flex items-center md:flex-1 md:justify-end">
+      <div class="hidden w-full flex-1 md:flex md:w-auto md:flex-none">
+        <button class="inline-flex items-center gap-2 whitespace-nowrap transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&amp;_svg]:pointer-events-none [&amp;_svg]:size-4 [&amp;_svg]:shrink-0 border border-input hover:bg-accent hover:text-accent-foreground px-4 py-2 relative h-8 w-full justify-start rounded-[0.5rem] bg-muted/50 text-sm font-normal text-muted-foreground shadow-none sm:pr-12 md:w-40 lg:w-56 xl:w-64">
+          <span class="hidden lg:inline-flex">Search...</span>
+          <kbd class="pointer-events-none absolute right-[0.3rem] top-[0.3rem] hidden h-5 select-none items-center gap-1 rounded border bg-muted px-1.5 font-mono text-[10px] font-medium opacity-100 sm:flex">
+            <span class="text-xs">⌘</span>K
+          </kbd>
+        </button>
+      </div>
+      <div aria-label="" class="hidden md:inline-block ml-2">
+        <ul class="flex items-center gap-1">
+          <li>
+            <NavIcon name="GitHub" href="https://github.com/KyleRicardo" icon="ri:github-fill" external={true} />
+          </li>
+          <li>
+            <NavIcon name="Twitter" href="https://x.com/KyleRicardo666" icon="ri:twitter-x-line" external={true} />
+          </li>
+          <li>
+            <NavIcon name="Bluesky" href="https://bsky.app/profile/kylericardo.bsky.social" icon="ri:bluesky-line" external={true} />
+          </li>
+          <li>
+            <NavIcon name="RSS Feed" href="https://example.com" icon="ri:rss-fill" external={true} />
+          </li>
+        </ul>
+      </div>
+      <div aria-label="display options" class="ml-1">
+        <button id="translate" class="inline-flex items-center justify-center gap-2 whitespace-nowrap rounded-md text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:pointer-events-none disabled:opacity-50 [&_svg]:pointer-events-none [&_svg]:size-4 [&_svg]:shrink-0 hover:bg-accent hover:text-accent-foreground h-8 w-8 px-0">
+          <Icon name="ri:translate-2" />
+          <span class="sr-only">Translate</span>
+        </button>
+        <ModeToggle client:load />
+      </div>
+    </div>
+  </div>
+</header>
+
+<script>
+  // State tracking
+  let menuOpen = false;
+  let previouslyWideScreen = window.innerWidth >= 768; // md breakpoint in Tailwind
+  
+  // Toggle menu function
+  function toggleMenu() {
+    console.log('toggleMenu', menuOpen)
+    if (menuOpen) {
+      // Close menu
+      document.getElementById('globalnav-anim-menutrigger-bread-top-close')?.beginElement();
+      document.getElementById('globalnav-anim-menutrigger-bread-bottom-close')?.beginElement();
+      document.getElementById('mobile-menu')?.setAttribute('data-state', 'closed');
+    } else {
+      // Open menu
+      document.getElementById('globalnav-anim-menutrigger-bread-top-open')?.beginElement();
+      document.getElementById('globalnav-anim-menutrigger-bread-bottom-open')?.beginElement();
+      document.getElementById('mobile-menu')?.setAttribute('data-state', 'open');
+    }
+    menuOpen = !menuOpen;
+  }
+  
+  // Handle resize events
+  function handleResize() {
+    const isWideScreen = window.innerWidth >= 768; // md breakpoint in Tailwind
+    
+    // If transitioning from small to large screen, close the menu
+    if (!previouslyWideScreen && isWideScreen) {
+      console.log('small -> wide');
+      if (menuOpen) {
+        document.getElementById('globalnav-anim-menutrigger-bread-top-close')?.beginElement();
+        document.getElementById('globalnav-anim-menutrigger-bread-bottom-close')?.beginElement();
+        document.getElementById('mobile-menu')?.setAttribute('data-state', 'closed');
+        menuOpen = false;
+      }
+    }
+    
+    // If going from wide to small, ensure menu is closed
+    if (previouslyWideScreen && !isWideScreen) {
+      // Reset menu state when transitioning back to mobile
+      console.log('wide -> small');
+      if (menuOpen) {
+        document.getElementById('globalnav-anim-menutrigger-bread-top-close')?.beginElement();
+        document.getElementById('globalnav-anim-menutrigger-bread-bottom-close')?.beginElement();
+        document.getElementById('mobile-menu')?.setAttribute('data-state', 'closed');
+        menuOpen = false;
+      }
+    }
+    
+    previouslyWideScreen = isWideScreen;
+  }
+  
+  // Add event listeners  
+  document.addEventListener('astro:page-load', () => {
+    document.getElementById('globalnav-menutrigger-button')?.addEventListener('click', toggleMenu);
+    window.addEventListener('resize', handleResize);
+    document.getElementById('mobile-menu')?.setAttribute('data-state', 'closed');
+    menuOpen = false;
+    document.getElementById('translate')?.addEventListener('click', () => {
+    console.log('translate');
+  });
+  })
+  
+</script>

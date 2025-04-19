@@ -1,0 +1,42 @@
+---
+import PostList from "@/components/PostList.astro";
+import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbPage, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
+import { getLangFromUrl, useTranslations } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import { getTags } from "@/utils/get-tags";
+import { getPostsByTag } from "@/utils/getPosts";
+import type { CollectionEntry } from "astro:content";
+export async function getStaticPaths() {
+	const tags = await getTags()
+	return tags.map(tag => ({
+    params: { tag: decodeURI(tag.name) }
+  }));
+}
+type Props = CollectionEntry<'blog'>;
+
+const params = Astro.params;
+const posts = await getPostsByTag(params.tag);
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+---
+
+<Layout title={`${t('nav.tags')}: ${params.tag}`}>
+  <div class="mx-auto w-full max-w-3xl">
+    <div class="flex items-center h-16 border-b border-grid">
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/tags">{t("nav.tags")}</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>{params.tag}</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+    </div>
+    
+    <PostList posts={posts} />
+  </div>
+</Layout>

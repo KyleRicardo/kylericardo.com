@@ -1,0 +1,25 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+type Props = CollectionEntry<'promo'>
+
+const props = Astro.props
+const { cover, icon, title, description, linkText = 'Explore', linkTarget, github, homepage, liveDemo } = props.data;
+---
+
+<div class="grid items-center gap-8 lg:grid-cols-2">
+  <a href={linkTarget} target="_blank" rel="noopener noreferrer">
+    <Image src={cover} alt={title} class="rounded-lg" />
+  </a>
+  <div class="flex flex-col">
+    <h2 class="mb-6 text-4xl font-bold text-pretty">
+      <a href={linkTarget} target="_blank" rel="noopener noreferrer">{title}</a>
+    </h2>
+    <p class="mb-8 max-w-xl text-muted-foreground lg:text-xl">{description}</p>
+    <div aria-label="promo footer">
+      <a href={linkTarget} target="_blank" rel="noopener noreferrer">{linkText} <Icon name="ri:arrow-right-line" class="inline" /></a>
+    </div>
+  </div>
+</div>

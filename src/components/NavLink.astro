@@ -1,0 +1,19 @@
+---
+interface Props {
+  name: string
+  href: string
+}
+
+const pathname = Astro.url.pathname
+
+const { name, href } = Astro.props
+
+const active = href === pathname
+---
+
+<a class="flex h-7 items-center justify-center rounded-full px-4 text-center text-sm font-medium text-muted-foreground transition-colors hover:text-primary data-[active=true]:bg-muted data-[active=true]:text-primary"
+  data-active={active}
+  href={href}
+>
+  {name}
+</a>

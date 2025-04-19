@@ -1,0 +1,24 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  date: Date;
+  excerpt?: string;
+}
+
+const { id, title, date, excerpt } = Astro.props;
+
+const formatter = new Intl.DateTimeFormat("zh-CN", {
+  month: "2-digit",
+  day: "2-digit"
+});
+
+const formattedDate = formatter.format(date);
+---
+<li>
+  <a href={`/posts/${id}`} class="group flex h-10 items-center rounded-xl hover:bg-muted">
+    <time datetime={date.toISOString()} class="w-[50px] font-semibold text-sm text-right">{formattedDate}</time>
+    <span class="relative h-full w-10 before:w-1 before:h-1 before:absolute before:left-1/2 before:top-1/2 before:-translate-x-1/2 before:-translate-y-1/2 before:block before:rounded-md before:bg-zinc-500 before:transition-[height] before:duration-300 before:ease-in-out group-hover:before:h-4 after:absolute after:w-0.5 after:h-4 after:left-[calc(50%-0.0625rem)] after:-translate-y-1/2 after:border-l-2 after:border-dashed after:border-primary/10 after:pointer-events-none"></span>
+    <span class="flex-1 font-semibold whitespace-nowrap overflow-hidden overflow-ellipsis text-base group-hover:pl-2 transition-[padding] duration-300 ease-in-out">{title}</span>
+  </a>
+</li>

@@ -1,0 +1,67 @@
+---
+import { getLangFromUrl } from "@/i18n/utils";
+import Layout from "@/layouts/Layout.astro";
+import { getFlatCategoryInfo } from "@/utils/get-categories";
+import { type CollectionEntry, getCollection } from "astro:content";
+import { render } from "astro:content";
+export async function getStaticPaths() {
+	const posts = await getCollection('blog', ({ data }) => {
+    return import.meta.env.PROD ? data.draft !== true : true;
+  });
+	return posts.map((post) => ({
+		params: { id: post.id },
+		props: post,
+	}));
+}
+type Props = CollectionEntry<'blog'>;
+
+const post = Astro.props;
+const { Content, remarkPluginFrontmatter } = await render(post);
+const { title, date, categories, tags, excerpt } = post.data;
+
+const lang = getLangFromUrl(Astro.url);
+const formattedDate = date.toLocaleDateString(lang, {dateStyle: 'medium'});
+const readingMinutes = Math.ceil(remarkPluginFrontmatter.minutesRead as number)
+const readingMinuteText = lang === 'zh' ?
+  `阅读约需 ${Math.ceil(readingMinutes)} 分钟` :
+  `${readingMinutes} min read`;
+
+const flatCategoryInfo = getFlatCategoryInfo(categories);
+---
+
+<Layout title={title}>
+  <div class="mx-auto max-w-3xl p-4 my-4 md:my-16" astro-content>
+    <header class="flex flex-col items-center gap-4 tracking-wide">
+      <div class="flex flex-wrap gap-4 text-sm justify-center font-medium md:font-semibold text-sky-500">
+        {tags && tags.map(tag => (
+          <a href={`/tags/${tag}`}>{`#${tag}`}</a>
+        ))}
+      </div>
+      <h1 class="font-semibold md:font-bold text-2xl md:text-3xl text-center">{title}</h1>
+      <div class="flex gap-4 justify-center text-sm font-semibold text-muted-foreground text-nowrap">
+        {flatCategoryInfo.length > 0 && flatCategoryInfo.map(category => (
+          <a href={category.href} class="pointer-events-auto hover:text-primary">{category.name}</a>
+        ))}
+      </div>
+      <div class="flex gap-4 justify-center text-xs font-semibold text-muted-foreground text-nowrap">
+        <time datetime={date.toISOString()}>{formattedDate}</time>
+        <div>{readingMinuteText}</div>
+      </div>
+    </header>
+    <article class="mx-auto prose dark:prose-invert mt-8">
+      <Content />
+    </article>
+  </div>
+</Layout>
+
+
+<script>
+  import mediumZoom from 'medium-zoom/dist/pure'
+  import 'medium-zoom/dist/style.css'
+
+  document.addEventListener('astro:page-load', () => {
+    mediumZoom('[astro-content] > img, [astro-content] :not(a) > img', {
+      background: "var(--background)",
+    });
+  });
+</script>

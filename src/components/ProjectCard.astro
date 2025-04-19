@@ -1,0 +1,48 @@
+---
+import { Image } from "astro:assets";
+import type { CollectionEntry } from 'astro:content';
+import NavIcon from "./NavIcon.astro";
+
+interface Props {
+  project: CollectionEntry<'project'>
+}
+
+const { project } = Astro.props
+const { cover, icon, title, description, github, homepage, liveDemo, tags } = project.data;
+---
+
+<div class="relative rounded-xl border hover:border-primary overflow-clip snap-center snap-always shrink-0 w-[calc(100vw-32px)] min-w-xs sm:w-full">
+  <a href={`/projects/${project.id}`} class="absolute inset-0 z-0" />
+  <div class="relative h-full flex flex-col z-10 pointer-events-none">
+    <Image src={cover} alt={title} class="max-h-54 object-cover" />
+    <div class="flex flex-col flex-1 gap-4 p-6">
+      <div class="flex gap-4 items-center">
+        <div class="w-12 h-12 shrink-0 rounded-lg overflow-clip">
+          <Image src={icon} alt={title} />
+        </div>
+        <div class="flex flex-col justify-center md:gap-1">
+          <h2 class="font-semibold text-lg md:text-2xl">{title}</h2>
+          <p class="text-sm text-muted-foreground">{description}</p>
+        </div>
+      </div>
+      <div aria-label="footer" class="flex items-center mt-auto">
+        {tags && tags.length > 0 && (
+          <div aria-label="project tags">
+            <ul>
+              {tags.map(tag => (
+                <li class="inline-flex items-center justify-center rounded-md border px-2 py-0.5 text-xs font-medium w-fit whitespace-nowrap shrink-0 [&>svg]:size-3 gap-1 [&>svg]:pointer-events-none focus-visible:border-ring focus-visible:ring-ring/50 focus-visible:ring-[3px] aria-invalid:ring-destructive/20 dark:aria-invalid:ring-destructive/40 aria-invalid:border-destructive transition-[color,box-shadow] overflow-hidden text-foreground [a&]:hover:bg-accent [a&]:hover:text-accent-foreground">
+                  <span>{tag}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+        <div aria-label="project links" class="ml-auto inline gap-0.5">
+          {github && <NavIcon name="GitHub Repository" href={github} icon="ri:github-fill" size="md" external />}
+          {homepage && <NavIcon name="Project Homepage" href={homepage} icon="ri:home-4-line" size="md" external />}
+          {liveDemo && <NavIcon name="Project Live Demo" href={liveDemo} icon="ri:global-line" size="md" external />}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

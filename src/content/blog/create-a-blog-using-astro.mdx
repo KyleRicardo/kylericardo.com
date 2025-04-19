@@ -1,0 +1,145 @@
+---
+title: "时隔多年再次重启：使用 Astro 搭建博客"
+description: "Astro 是最适合构建像博客、营销网站、电子商务网站这样的以内容驱动的网站的 Web 框架。Astro 以开创了一种新的前端架构而闻名，与其他框架相比它减少了 JavaScript 的开销和复杂性。如果你需要一个加载速度快、具有良好 SEO 的网站，那么 Astro 就是你的选择。"
+date: 2025-03-02 18:18:18
+categories: 技术向
+tags:
+  - Astro
+  - Frontend
+  - 前端 技术
+cover: "/images/2024/astro-blog-cover.webp"
+---
+
+Astro 是最适合构建像博客、营销网站、电子商务网站这样的以内容驱动的网站的 Web 框架。Astro 以开创了一种新的前端架构而闻名，与其他框架相比它减少了 JavaScript 的开销和复杂性。如果你需要一个加载速度快、具有良好 SEO 的网站，那么 Astro 就是你的选择。
+
+![Astro 官方吉祥物](https://astro.build/assets/press/full-logo-light.svg)
+
+## 为什么选择 Astro？
+
+在众多静态站点生成器中，**Astro** 凭借以下特性脱颖而出：
+
+1. **岛屿架构** 🏝️ - 按需加载交互组件
+2. **零 JS 默认** 🚀 - 自动剥离未使用 JavaScript
+3. **多框架支持** ⚛️ - 可混合使用 React/Vue/Svelte
+4. **内容驱动** 📚 - 内置 MD/MDX 支持
+
+> 💡 根据[Web Almanac 2023](https://almanac.httparchive.org/)报告，使用 Astro 构建的网站在性能评分中平均超过 90/100
+
+## 快速上手指南
+
+### 环境准备
+```bash
+# 创建项目
+npm create astro@latest my-blog
+cd my-blog
+
+# 添加Markdown支持
+npm install @astrojs/mdx
+```
+
+### 目录结构
+```
+src/
+├─ pages/
+│  └─ index.astro
+├─ layouts/
+│  └─ BaseLayout.astro
+├─ content/
+│  └─ posts/
+│     └─ first-post.md
+└─ styles/
+   └─ global.css
+```
+
+### 基础配置 `astro.config.mjs`
+```javascript
+import { defineConfig } from 'astro/config'
+import mdx from '@astrojs/mdx'
+
+export default defineConfig({
+  integrations: [mdx()],
+  markdown: {
+    syntaxHighlight: 'prism',
+    shikiConfig: {
+      theme: 'github-dark'
+    }
+  }
+})
+```
+
+## 进阶技巧
+
+### 组件岛屿架构
+```astro
+---
+// src/components/Counter.astro
+import CounterReact from '../components/Counter.jsx'
+---
+
+<div class="counter-container">
+  <CounterReact client:load />
+</div>
+
+<style>
+  .counter-container {
+    padding: 1rem;
+    border: 1px solid #eee;
+  }
+</style>
+```
+
+### 特性对比表
+
+| 特性          | Astro  | Hexo   | Gatsby |
+|---------------|--------|--------|--------|
+| 构建速度      | ⚡️ 快  | 🐢 中等 | 🚂 慢   |
+| JS 默认体积    | 0KB    | 30KB+  | 100KB+ |
+| 学习曲线      | 平缓    | 简单    | 陡峭    |
+| 插件生态      | 成长中  | 成熟    | 丰富    |
+
+## Hexo 用户迁移指南
+
+1. **内容迁移**  
+   将`source/_posts`目录下的 Markdown 文件复制到`src/content/posts`
+
+2. **模板改造**  
+   把`.ejs`/`.swig`模板转换为`.astro`组件：
+   ```astro
+   <!-- 原 Hexo 模板片段 -->
+   <%- partial('_partial/article', { post: page.posts }) %>
+
+   <!-- 转换后 Astro 模板 -->
+   <Article {post} />
+   ```
+
+3. **生成器配置**  
+   使用`@astrojs/rss`包替代 hexo-generator-feed
+
+## 更多可能性
+
+### 视图过渡动画
+```astro
+---
+// 在页面头部添加
+import { ViewTransitions } from 'astro:transitions'
+---
+
+<head>
+  <ViewTransitions />
+</head>
+```
+
+---
+
+**下一步行动建议**：  
+✅ 运行 `npm run dev` 启动本地服务器  
+✅ 访问 `localhost:4321` 查看效果  
+✅ 部署到[Netlify](https://www.netlify.com/)或[Vercel](https://vercel.com/)
+
+> 🚀 完整示例代码已托管至[GitHub 仓库](https://github.com/example/astro-blog-demo)
+
+*本文测试数据基于 Astro v3.0，部分特性可能需要更高版本支持*
+
+U 盘也会报错吗
+
+![分割线](https://img.shields.io/badge/-%E5%86%85%E5%AE%B9%E7%BB%93%E6%9D%9F-%23005999?style=for-the-badge)

@@ -1,0 +1,18 @@
+---
+import BlogLayout from "@/layouts/BlogLayout.astro";
+import Layout from "@/layouts/Layout.astro";
+import { getLangFromUrl, useTranslations } from '@/i18n/utils';
+import { getArchives } from "@/utils/getPosts";
+import PostList from "@/components/PostList.astro";
+
+const lang = getLangFromUrl(Astro.url);
+const t = useTranslations(lang);
+
+const postsGroupedByYear = await getArchives();
+---
+
+<Layout title={t('nav.archives')}>
+  <BlogLayout>
+    <PostList posts={postsGroupedByYear} />
+  </BlogLayout>
+</Layout>
